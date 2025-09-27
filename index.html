@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPE Selection Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root { --accent: #D6D85D; }
+
+body {
+  margin: 0;
+  font-family: "Montserrat", Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0;
+  box-sizing: border-box;
+}
+/*body {
+  margin: 0;
+  padding: 16; 
+  font-family: "Montserrat", Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+*/
+
+.container {
+  width: 95%;
+  max-width: 1400px;
+}
+
+h1 {
+  padding: 5px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.top-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+/* Animated Clear Button */
+ .clear-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #D6D85D;
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* icon perfectly centered */
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.clear-btn i {
+  font-size: 1.2rem;
+  transition: all 0.3s;
+}
+
+.clear-btn span {
+  position: absolute;      /* take it out of normal flow */
+  left: 60px;              /* start just outside button */
+  opacity: 0;
+  white-space: nowrap;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.clear-btn:hover {
+  width: 140px;
+  border-radius: 50px;
+  background-color: rgb(255, 69, 69);
+  justify-content: flex-start;
+  padding-left: 15px;
+}
+
+.clear-btn:hover span {
+  opacity: 1;
+  left: 50px;              /* slide text in */
+}
+
+
+
+.board {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.activities {
+  width: 15%;
+  min-width: 180px;
+  text-align: center;
+}
+
+.activities h2 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.activities button {
+  display: block;
+  width: 100%;
+  margin-bottom: 16px;
+  border: none;
+  border-radius: 1rem;
+  padding: 16px 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  background: #fff;
+  box-shadow: inset -4px 3px var(--accent), -10px 10px 20px rgba(0,0,0,0.15);
+  transition: transform 0.25s ease, color 0.3s ease;
+}
+
+.activities button::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  z-index: -1;
+  transition: transform 0.4s ease;
+}
+.activities button:hover::before { transform: scale(6); }
+.activities button:hover { transform: translateY(-4px); }
+
+.ppe-wrap { flex: 1; }
+
+.ppe {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  justify-items: center;
+}
+
+.ppe-item {
+  position: relative;
+  border-radius: 1rem;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  max-width: 160px;
+  height: 140px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  color: #fff;
+  font-weight: bold;
+  transition: transform 0.2s, box-shadow 0.3s, opacity 0.3s;
+}
+.ppe-item:hover { transform: scale(1.05); box-shadow: 0 8px 24px rgba(255,255,255,0.3); }
+.ppe-item .overlay {
+  width: 100%;
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+.ppe-item.highlight {
+  outline: 3px solid var(--accent);
+  box-shadow: 0 0 12px 4px var(--accent);
+  z-index: 2;
+}
+.ppe-item.unselected {
+  opacity: 0.4;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Responsive */
+@media (max-width: 1200px) { .ppe { grid-template-columns: repeat(4,1fr); gap:18px; } }
+@media (max-width: 992px) { 
+  .ppe { grid-template-columns: repeat(3,1fr); gap:16px; } 
+  .activities { width: 25%; }
+}
+@media (max-width: 768px) {
+  .board {
+    flex-direction: column;
+    align-items: center;
+  }
+  .activities.left,
+  .activities.right {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    order: 0; /* activities on top */
+  }
+  .ppe-wrap { width: 100%; order: 1; }
+  .activities button { flex: 1 1 calc(50% - 10px); }
+  .ppe { grid-template-columns: repeat(2,1fr); gap:14px; }
+}
+@media (max-width: 480px) { 
+  .ppe { grid-template-columns: 1fr; } 
+  .activities button { flex:1 1 100%; }
+}
+@media (min-width: 1366px) { .ppe-item { max-width: 150px; height: 140px; } }
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Personal Protective Equipment (PPE)</h1>
+
+  <div class="top-controls" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+  
+  <!-- Left side button -->
+  <button onclick="location.href='index1.html'" 
+    style="padding:10px 16px; background:#D6D85D; border:none; border-radius:8px; 
+           font-weight:bold; cursor:pointer; transition:0.3s; color:#000;">
+    <i class="fas fa-clipboard-check"></i>
+Start PPE Test
+  </button>
+
+  <!-- Right side clear button -->
+  <button class="clear-btn" onclick="clearSelection()">
+    <i class="fas fa-trash"></i>
+    <span>Clear</span>
+  </button>
+
+</div>
+
+
+  <div class="board">
+    <div class="activities left">
+      <h2>ACTIVITIES</h2>
+      <button onclick="showPPE('manual')">Manual Handling & Lifting</button>
+      <button onclick="showPPE('welding')">Welding</button>
+      <button onclick="showPPE('carpentry')">Carpentry Work</button>
+      <button onclick="showPPE('masonry')">Masonry & Plastering</button>
+      <button onclick="showPPE('chemicals')">Using Chemicals</button>
+      <button onclick="showPPE('pop')">POP/Punning Work</button>
+      <button onclick="showPPE('partition')">Partition Work</button>
+      <button onclick="showPPE('tile')">Tile Cutting & Laying</button>
+      <button onclick="showPPE('concrete')">Concrete Core Cutting</button>
+    </div>
+
+    <div class="ppe-wrap">
+      <div class="ppe" id="ppeGrid">
+        <div class="ppe-item" id="helmet" style="background-image:url('https://karamonline.com/media/magefan_blog/Choosing-the-Right-Safety-Helmet-for-Construction-Types_-Standards-_-Maintenance01.jpg')"><div class="overlay">Helmet</div></div>
+        <div class="ppe-item" id="glasses" style="background-image:url('https://rxsafetycanada.com/media/wysiwyg/new-home-main-slider-mobile.jpg')"><div class="overlay">Safety Goggles</div></div>
+        <div class="ppe-item" id="mask" style="background-image:url('https://todayshomeowner.com/wp-content/uploads/2011/06/respirator-and-dust-mask-2.jpg')"><div class="overlay">Dust/Mist Mask</div></div>
+        <div class="ppe-item" id="jacket" style="background-image:url('https://prortx.com/wp-content/uploads/2025/05/V3_Leith_ProRTX_Day02_LIFESTYLE4-RX770HVYELLOW_0856-scaled-e1751896565667.jpg')"><div class="overlay">High-Visibility Jacket</div></div>
+        <div class="ppe-item" id="boots" style="background-image:url('https://www.neptunboot.co.za/wp-content/uploads/2022/11/Neptun-Boot-PPE-Gumboot-blog.png')"><div class="overlay">Gum/Safety Boots</div></div>
+        <div class="ppe-item" id="rubberGloves" style="background-image:url('https://images.51microshop.com/14981/product/20250616/20250616100033115.jpg')"><div class="overlay">Rubber Gloves</div></div>
+        <div class="ppe-item" id="overalls" style="background-image:url('https://www.makboots.com/cdn/shop/collections/xlarge-FR50_PW54_PW42_A310_11.jpg?v=1742991223')"><div class="overlay">Overalls/Long Sleeves</div></div>
+        <div class="ppe-item" id="protective" style="background-image:url('https://i.ebayimg.com/images/g/xkkAAOSw-UpmWCCP/s-l400.jpg')"><div class="overlay">Protective Glasses</div></div>
+        <div class="ppe-item" id="earPlugs" style="background-image:url('https://www.elitespinc.com/cdn/shop/products/C220R_800x800_crop_center@2x.jpg?v=1593107177')"><div class="overlay">Ear Plugs</div></div>
+        <div class="ppe-item" id="chemicalGloves" style="background-image:url('https://www.zoro.com/static/cms/product/large/Z1Fvtwfo5oy.JPG')"><div class="overlay">Chemical Gloves</div></div>
+        <div class="ppe-item" id="harness" style="background-image:url('https://blog.atom.com.au/hubfs/8c61a5_bfc1eeaab1b94a61aac80b3eec188e8b_mv2.jpg')"><div class="overlay">Harness</div></div>
+        <div class="ppe-item" id="abrasionGloves" style="background-image:url('https://m.media-amazon.com/images/I/71YDB25X3JL._UF1000,1000_QL80_.jpg')"><div class="overlay">Abrasion Gloves</div></div>
+        <div class="ppe-item" id="earMuffs" style="background-image:url('https://cdn.myshoptet.com/usr/www.klimafil.cz/user/documents/upload/3m/peltor-ws-cush.png')"><div class="overlay">Ear Muffs</div></div>
+        <div class="ppe-item" id="faceShield" style="background-image:url('https://i.ebayimg.com/images/g/5MIAAOSw73xhbtuU/s-l400.jpg')"><div class="overlay">Face Shield</div></div>
+        <div class="ppe-item" id="lifeLine" style="background-image:url('https://safeatheights.com.au/wp-content/uploads/2022/12/P01_Horizontal-Lifeline.jpg')"><div class="overlay">Life Line</div></div>
+      </div>
+    </div>
+
+    <div class="activities right">
+      <h2>ACTIVITIES</h2>
+      <button onclick="showPPE('heightwork')">Height Work</button>
+      <button onclick="showPPE('rockwool')">Handling Glass/Rock Wool</button>
+      <button onclick="showPPE('floorchipping')">Floor & Wall Chipping</button>
+      <button onclick="showPPE('adhesives')">Using Adhesives/Sealants</button>
+      <button onclick="showPPE('mobile')">Using Mobile Machinery</button>
+      <button onclick="showPPE('handtools')">Using Hand Tools</button>
+      <button onclick="showPPE('housekeeping')">Housekeeping</button>
+      <button onclick="showPPE('electrical')">Electrical Work</button>
+      <button onclick="showPPE('general')">General Work</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const activityPPE = {
+  manual: ["helmet","rubberGloves","boots","harness","lifeLine"],
+  welding: ["helmet","protective","rubberGloves","overalls","boots","mask","faceShield"],
+  carpentry: ["helmet","overalls","earMuffs","mask","abrasionGloves","faceShield"],
+  masonry: ["helmet","mask","rubberGloves","protective","earPlugs"],
+  chemicals: ["chemicalGloves","mask","glasses","boots","overalls"],
+  pop: ["mask","rubberGloves","helmet","protective"],           
+  partition: ["mask","rubberGloves","helmet","protective","boots","earPlugs"],   
+  tile: ["mask","glasses","boots","abrasionGloves","helmet","earMuffs","jacket"],
+  concrete: ["helmet","mask","overalls","boots","rubberGloves"],
+  heightwork: ["helmet","harness","protective","boots","lifeLine"],
+  rockwool: ["mask","rubberGloves","glasses","jacket","helmet"],
+  floorchipping: ["helmet","rubberGloves","overalls","boots","earPlugs"],
+  adhesives: ["chemicalGloves","mask","protective","boots"],
+  mobile: ["helmet","protective","boots","earMuffs"],
+  handtools: ["rubberGloves","helmet","jacket","boots","glasses"],
+  housekeeping: ["rubberGloves","boots","overalls","mask","helmet"],
+  electrical: ["helmet","rubberGloves","protective","overalls"],
+  general: ["helmet","rubberGloves","boots","jacket","mask"]
+};
+
+function clearHighlights() {
+  document.querySelectorAll(".ppe-item").forEach(el => {
+    el.classList.remove("highlight","unselected");
+  });
+}
+
+function showPPE(activity) {
+  const allItems = document.querySelectorAll(".ppe-item");
+  allItems.forEach(el => el.classList.remove("highlight","unselected"));
+  if (!activityPPE[activity]) return;
+  allItems.forEach(el => activityPPE[activity].includes(el.id) ? el.classList.add("highlight") : el.classList.add("unselected"));
+}
+
+document.querySelector(".clear-btn").addEventListener("click", clearHighlights);
+</script>
+</body>
+</html>

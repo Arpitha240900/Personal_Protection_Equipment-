@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPE Knowledge Test</title>
+<link rel="icon" type="image/png" href="./assests/logo-removebg-preview.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root { --accent: #D6D85D; }
+
+body {
+  margin: 0;
+  font-family: "Montserrat", Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.container {
+  width: 95%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 1.8rem;
+  padding: 5px;
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+p { margin-bottom: 20px; }
+
+/* Custom dropdown */
+.custom-select-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+}
+
+.custom-select {
+  background: #fff;
+  color: #000;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.custom-select::after {
+  content: "\25BC"; 
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.custom-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  max-height: 240px;
+  overflow-y: auto;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.custom-options div {
+  padding: 10px;
+  cursor: pointer;
+  color: #000;
+}
+
+.custom-options div:hover {
+  background: #f0f0f0;
+}
+
+/* top bar controls */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  
+}
+
+.left-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Start Test button */
+.start-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--accent);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.start-btn:hover {
+  background-color: #bfc24d;
+}
+
+/* Animated Clear Button */
+.clear-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0,0,0,0.164);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  color: #000;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.clear-btn i { font-size: 1.2rem; transition: all 0.3s; }
+
+.clear-btn span {
+  position: absolute;
+  left: 60px;
+  opacity: 0;
+  white-space: nowrap;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.clear-btn:hover {
+  width: 140px;
+  border-radius: 50px;
+  background-color: rgb(255, 69, 69);
+  justify-content: flex-start;
+  padding-left: 15px;
+}
+
+.clear-btn:hover span {
+  opacity: 1;
+  left: 50px;
+}
+
+/* PPE grid */
+.ppe-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  justify-items: center;
+  margin: 20px auto;
+  max-width: 1200px;
+}
+
+.ppe-item {
+  position: relative;
+  border-radius: 1rem;
+  background-size: cover;
+  background-position: center;
+  width: 200px;
+  height: 140px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  color: #fff;
+  font-weight: bold;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.3s, opacity 0.3s;
+}
+
+.ppe-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(255,255,255,0.3);
+}
+
+.overlay {
+  width: 100%;
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 1;
+}
+
+.ppe-item.selected {
+  outline: 3px solid var(--accent);
+  box-shadow: 0 0 12px 4px var(--accent);
+  z-index: 2;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.modal-content {
+  background: rgba(255,255,255,0.1);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+  backdrop-filter: blur(4.4px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  padding: 25px 35px;
+  text-align: center;
+  max-width: 400px;
+  font-size:0.9rem;
+  font-weight: bold;
+}
+.modal button {
+  margin-top: 15px;
+  padding: 8px 16px;
+  border: none;
+  background: var(--accent);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#resultContent {
+  font-weight: normal;   /* reduce the font weight of the whole modal text */
+  line-height: 1.8;      /* adds line spacing, adjust the value as needed */
+}
+
+
+
+/* Responsive */
+@media (max-width: 1200px) { .ppe-grid { grid-template-columns: repeat(4,1fr); gap:18px; } }
+@media (max-width: 992px) { .ppe-grid { grid-template-columns: repeat(3,1fr); gap:16px; } }
+@media (max-width: 768px) { .ppe-grid { grid-template-columns: repeat(2,1fr); gap:14px; } }
+@media (max-width: 480px) { .ppe-grid { grid-template-columns: 1fr; gap:10px; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  
+
+  <h1>PPE Knowledge Test</h1>
+  <p>Select an activity and choose the correct PPE items.</p>
+
+  <!-- Custom dropdown -->
+  <div class="custom-select-wrapper">
+    <div class="custom-select" id="selected">-- Select Activity --</div>
+    <div class="custom-options" id="customOptions">
+      <div data-value="manual">Manual Handling & Lifting</div>
+      <div data-value="welding">Welding</div>
+      <div data-value="carpentry">Carpentry Work</div>
+      <div data-value="masonry">Masonry & Cement Plastering</div>
+      <div data-value="chemicals">Using Construction Chemicals</div>
+      <div data-value="pop">POP/Punning Work</div>
+      <div data-value="partition">Partition Work</div>
+      <div data-value="tile">Tile Cutting & Laying</div>
+      <div data-value="concrete">Concrete Core Cutting</div>
+      <div data-value="heightwork">Height Work Above 6 feet</div>
+      <div data-value="rockwool">Handling Glass/Rock Wool</div>
+      <div data-value="floorchipping">Floor & Wall Chipping</div>
+      <div data-value="adhesives">Using Adhesives/Sealants</div>
+      <div data-value="mobile">Using Mobile Machinery</div>
+      <div data-value="handtools">Using Hand Tools</div>
+      <div data-value="housekeeping">Housekeeping Activity</div>
+      <div data-value="electrical">Electrical Installation/Commissioning</div>
+      <div data-value="general">General Work</div>
+    </div>
+  </div>
+  <div class="top-controls">
+    <div class="left-buttons" style="margin-left: 115px;">
+      <button class="start-btn" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Home</button>
+    </div>
+    <button class="clear-btn" onclick="clearAll()" style="margin-right: 115px;">
+      <i class="fas fa-trash"></i>
+      <span>Clear</span>
+    </button>
+  </div>
+
+  <div class="ppe-grid" id="ppeGrid"></div>
+
+  <button class="submit-btn" onclick="checkAnswers()">Submit</button>
+</div>
+
+<!-- Modals -->
+<div class="modal" id="limitModal">
+  <div class="modal-content">
+    <p>You have reached the maximum number of PPE selections for this activity.</p>
+    <button onclick="closeModal('limitModal')">OK</button>
+  </div>
+</div>
+<div class="modal" id="activityModal">
+  <div class="modal-content">
+    <p>Please select an activity first!</p>
+    <button onclick="closeModal('activityModal')">OK</button>
+  </div>
+</div>
+<div class="modal" id="incompleteModal">
+  <div class="modal-content" id="incompleteContent">
+    <button onclick="closeModal('incompleteModal')">OK</button>
+  </div>
+</div>
+<div class="modal" id="resultModal">
+  <div class="modal-content" id="resultContent">
+    <button onclick="closeModal('resultModal')">Close</button>
+  </div>
+</div>
+
+<script>
+// PPE Data
+const allPPE = [
+  {id:"helmet", label:"Helmet", img:"https://karamonline.com/media/magefan_blog/Choosing-the-Right-Safety-Helmet-for-Construction-Types_-Standards-_-Maintenance01.jpg"},
+  {id:"glasses", label:"Safety Goggles", img:"https://rxsafetycanada.com/media/wysiwyg/new-home-main-slider-mobile.jpg"},
+  {id:"mask", label:"Dust/Mist Mask", img:"https://todayshomeowner.com/wp-content/uploads/2011/06/respirator-and-dust-mask-2.jpg"},
+  {id:"jacket", label:"High-Vis Jacket", img:"https://prortx.com/wp-content/uploads/2025/05/V3_Leith_ProRTX_Day02_LIFESTYLE4-RX770HVYELLOW_0856-scaled-e1751896565667.jpg"},
+  {id:"boots", label:"Safety Boots", img:"https://www.neptunboot.co.za/wp-content/uploads/2022/11/Neptun-Boot-PPE-Gumboot-blog.png"},
+  {id:"rubberGloves", label:"Rubber Gloves", img:"https://images.51microshop.com/14981/product/20250616/20250616100033115.jpg"},
+  {id:"overalls", label:"Overalls/Long Sleeves", img:"https://www.makboots.com/cdn/shop/collections/xlarge-FR50_PW54_PW42_A310_11.jpg?v=1742991223"},
+  {id:"protective", label:"Protective Glasses", img:"https://i.ebayimg.com/images/g/xkkAAOSw-UpmWCCP/s-l400.jpg"},
+  {id:"earPlugs", label:"Ear Plugs", img:"https://www.elitespinc.com/cdn/shop/products/C220R_800x800_crop_center@2x.jpg?v=1593107177"},
+  {id:"chemicalGloves", label:"Chemical Gloves", img:"https://www.zoro.com/static/cms/product/large/Z1Fvtwfo5oy.JPG"},
+  {id:"harness", label:"Harness", img:"https://blog.atom.com.au/hubfs/8c61a5_bfc1eeaab1b94a61aac80b3eec188e8b_mv2.jpg"},
+  {id:"abrasionGloves", label:"Abrasion Gloves", img:"https://m.media-amazon.com/images/I/71YDB25X3JL._UF1000,1000_QL80_.jpg"},
+  {id:"earMuffs", label:"Ear Muffs", img:"https://cdn.myshoptet.com/usr/www.klimafil.cz/user/documents/upload/3m/peltor-ws-cush.png"},
+  {id:"faceShield", label:"Face Shield", img:"https://i.ebayimg.com/images/g/5MIAAOSw73xhbtuU/s-l400.jpg"},
+  {id:"lifeLine", label:"Life Line", img:"https://safeatheights.com.au/wp-content/uploads/2022/12/P01_Horizontal-Lifeline.jpg"}
+];
+
+const activityPPE = {
+  manual:["helmet","rubberGloves","boots","harness","lifeLine"],
+  welding:["helmet","protective","rubberGloves","overalls","boots","mask","faceShield"],
+  carpentry:["helmet","overalls","earMuffs","mask","abrasionGloves","faceShield"],
+  masonry:["helmet","mask","rubberGloves","protective","earPlugs"],
+  chemicals:["chemicalGloves","mask","glasses","boots","overalls"],
+  pop:["mask","rubberGloves","helmet","protective"],
+  partition:["mask","helmet","protective","boots","earPlugs"],
+  tile:["mask","glasses","boots","abrasionGloves","helmet","earMuffs","jacket"],
+  concrete:["helmet","mask","overalls","boots","rubberGloves"],
+  heightwork:["helmet","harness","protective","boots","lifeLine"],
+  rockwool:["mask","rubberGloves","glasses","jacket","helmet"],
+  floorchipping:["helmet","rubberGloves","overalls","boots","earPlugs"],
+  adhesives:["chemicalGloves","mask","protective","boots"],
+  mobile:["helmet","protective","boots","earMuffs"],
+  handtools:["rubberGloves","helmet","jacket","boots","glasses"],
+  housekeeping:["rubberGloves","boots","overalls","mask","helmet"],
+  electrical:["helmet","rubberGloves","protective","overalls"],
+  general:["helmet","rubberGloves","boots","jacket","mask"]
+};
+
+// Render PPE grid
+const ppeGrid = document.getElementById("ppeGrid");
+allPPE.forEach(item => {
+  const div = document.createElement("div");
+  div.className = "ppe-item";
+  div.dataset.id = item.id;
+  div.style.backgroundImage = `url('${item.img}')`;
+  div.innerHTML = `<div class="overlay">${item.label}</div>`;
+  div.addEventListener("click", () => toggleSelect(div));
+  ppeGrid.appendChild(div);
+});
+
+function toggleSelect(div) {
+  const activity = selected.dataset.value;
+  if(!activity){ openModal("activityModal"); return; }
+  const correct = activityPPE[activity];
+  const maxAllowed = correct.length;
+  const selectedItems = document.querySelectorAll(".ppe-item.selected");
+  if(!div.classList.contains("selected") && selectedItems.length >= maxAllowed){ openModal("limitModal"); return; }
+  div.classList.toggle("selected");
+}
+
+function checkAnswers() {
+  const activity = selected.dataset.value;
+  if (!activity) { openModal("activityModal"); return; }
+
+  const selectedItems = Array.from(document.querySelectorAll(".ppe-item.selected")).map(el => el.dataset.id);
+  const correct = activityPPE[activity];
+
+  // Check if all required PPEs are selected
+  if (selectedItems.length < correct.length) {
+    document.getElementById("incompleteContent").innerHTML = `
+      <p>You must select ${correct.length} PPEs for this activity.<br>Currently selected: ${selectedItems.length}</p>
+      <button onclick="closeModal('incompleteModal')">OK</button>`;
+    openModal("incompleteModal");
+    return;
+  }
+
+  // Determine correct, missed, and wrong selections
+  const correctlySelected = selectedItems.filter(id => correct.includes(id));
+  const missed = correct.filter(id => !selectedItems.includes(id));
+  const wrongSelected = selectedItems.filter(id => !correct.includes(id));
+
+  // Build the results message with colored headings
+  let message = `<h2 style="text-align:center; margin-bottom:10px;">Result</h2>`; // Added heading
+
+  message += `You got <span style="color:var(--accent)">${correctlySelected.length}</span> out of ${correct.length} correct.<br>`;
+
+  message += (correctlySelected.length / correct.length >= 0.7) 
+             ? " ✅ <span style='color:lightgreen; background-color: rgba(0,128,0,0.2); padding: 2px 6px; border-radius:4px;'>PASS</span>" 
+             : " ❌ <span style='color:red; background-color: rgba(255,0,0,0.2); padding: 2px 6px; border-radius:4px;'>FAIL</span>";
+
+  if(correctlySelected.length) {
+    message += "<br><strong style='color:lightgreen'>Correctly selected:</strong> " + correctlySelected.map(id => allPPE.find(p=>p.id===id).label).join(", ");
+  }
+  if(missed.length) {
+    message += "<br><strong style='color:orange'>Missed:</strong> " + missed.map(id => allPPE.find(p=>p.id===id).label).join(", ");
+  }
+  
+
+  document.getElementById("resultContent").innerHTML = `<p>${message}</p><button onclick="closeModal('resultModal')">Close</button>`;
+  openModal("resultModal");
+
+  // Reset selections and dropdown
+  clearAll();
+}
+
+
+function clearSelection(){ document.querySelectorAll(".ppe-item.selected").forEach(el=>el.classList.remove("selected")); }
+
+// Clear button also resets dropdown
+function clearAll() {
+  clearSelection();
+  selected.textContent = "-- Select Activity --";
+  selected.dataset.value = "";
+}
+
+function openModal(id){ document.getElementById(id).style.display="flex"; }
+function closeModal(id){ document.getElementById(id).style.display="none"; }
+
+// Custom dropdown logic
+const selected = document.getElementById("selected");
+const optionsContainer = document.getElementById("customOptions");
+
+selected.addEventListener("click", () => {
+  optionsContainer.style.display = optionsContainer.style.display === "block" ? "none" : "block";
+});
+
+optionsContainer.querySelectorAll("div").forEach(option => {
+  option.addEventListener("click", () => {
+    selected.textContent = option.textContent;
+    selected.dataset.value = option.dataset.value;
+    optionsContainer.style.display = "none";
+    clearSelection();
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if(!e.target.closest(".custom-select-wrapper")) optionsContainer.style.display = "none";
+});
+</script>
+
+</body>
+</html>
